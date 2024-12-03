@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PublishAOT>true</PublishAOT>
+    <PublishTrimmed>true</PublishTrimmed>
+    <ReadyToRun>false</ReadyToRun>
+    <TrimMode>link</TrimMode>
+    <Title>Tychosoft Extensions</Title>
+    <Product>Tychosoft Extensions</Product>
+    <Version>0.0.1</Version>
+    <Authors>David Sugar</Authors>
+    <Company>Tycho Softworks</Company>
+    <Description>Tychosoft C# Extensions</Description>
+    <Copyright>© 2024 Tycho Softworks. Licensed under the MIT License.</Copyright>
+    <PackageId>Tychosoft.Extensions</PackageId>
+    <RepositoryUrl>https://github.com/tychosoft/tychoext</RepositoryUrl>
+    <PackageTags>sdk;extensions;logging;timers;tasks</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.1" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="FEATURES.md" Pack="true" PackagePath="" />
+    <None Include="CHANGELOG.md" Pack="true" PackagePath="" />
+    <None Include="LICENSE.md" Pack="true" PackagePath="" />
+    <None Include="CONTRIBUTING.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+</Project>
