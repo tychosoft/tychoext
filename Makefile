@@ -24,7 +24,8 @@ release:
 	@dotnet pack -c Release
 
 publish:	release
-	@dotnet nuget push bin/Release/$(PROJECT).$(VERSION).nupkg -k $(APIKEY)
+	@dotnet nuget push bin/Release/$(PROJECT).$(VERSION).nupkg -k $(APIKEY) -s https://api.nuget.org/v3/index.json
+	@dotnet nuget push bin/Release/$(PROJECT).$(VERSION).snupkg -k $(APIKEY) -s https://api.nuget.org/v3/index.json
 
 clean:
 	@dotnet clean
@@ -34,6 +35,7 @@ restore:
 
 list:	release
 	@unzip -l bin/Release/$(PROJECT).$(VERSION).nupkg
+	@unzip -l bin/Release/$(PROJECT).$(VERSION).snupkg
 
 # Optional make components we may add
 sinclude .make/*.mk
