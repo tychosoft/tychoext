@@ -10,7 +10,7 @@
 
 # Project constants
 PROJECT := Tychosoft.Extensions
-VERSION := 0.0.1
+VERSION := 0.0.2
 PATH := ./bin/Debug/$(DOTNET):${PATH}
 
 .PHONY: debug release publish clean restore version list
@@ -24,8 +24,8 @@ release:
 	@dotnet pack -c Release
 
 publish:	release
+	@git tag v$(VERSION)
 	@dotnet nuget push bin/Release/$(PROJECT).$(VERSION).nupkg -k $(APIKEY) -s https://api.nuget.org/v3/index.json
-	@dotnet nuget push bin/Release/$(PROJECT).$(VERSION).snupkg -k $(APIKEY) -s https://api.nuget.org/v3/index.json
 
 clean:
 	@dotnet clean
