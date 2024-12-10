@@ -21,12 +21,7 @@ namespace Tychosoft.Extensions {
     public class FileLogger(string logPath) : ILogger {
         private readonly string path = logPath;
         private static readonly object locker = new();
-
-#if DEBUG
-        private static readonly LogLevel level = LogLevel.Debug;
-#else
         private static readonly LogLevel level = LogLevel.Information;
-#endif
 
         IDisposable ILogger.BeginScope<TState>(TState state) {
             return BeginScope(state)!;
@@ -59,15 +54,9 @@ namespace Tychosoft.Extensions {
         private static ILoggerFactory? factory;
         private static readonly LoggingLevelSwitch level;
 
-#if DEBUG
         private class LoggingLevelSwitch {
             public LogLevel MinimumLevel { get; set; } = LogLevel.Information;
         }
-#else
-        private class LoggingLevelSwitch {
-            public LogLevel MinimumLevel { get; set; } = LogLevel.Warning;
-        }
-#endif
 
         static Logger() {
             level = new LoggingLevelSwitch();
@@ -108,7 +97,6 @@ namespace Tychosoft.Extensions {
             logger?.LogError("{Message}", [message ?? "null", args]);
         }
 
-#if DEBUG
         public static void Debug(string? message, params object?[] args) {
             logger?.LogDebug("{Message}", [message ?? "null", args]);
         }
@@ -116,22 +104,18 @@ namespace Tychosoft.Extensions {
         public static void Trace(string? message, params object?[] args) {
             logger?.LogTrace("{Message}", [message ?? "null", args]);
         }
-#else
-        public static void Debug(string? message) {}
-        public static void Trace(string? message) {}
-#endif
 
         public static void Fatal(int code, string? message, params object?[] args) {
             logger?.LogCritical("{Message}", [message ?? "null", args]);
             Environment.Exit(code);
         }
 
+        public static void SetQuiet() {
+            level.MinimumLevel = LogLevel.Warning;
+        }
+
         public static void SetVerbose() {
-#if DEBUG
             level.MinimumLevel = LogLevel.Trace;
-#else
-            level.MinimumLevel = LogLevel.Information;
-#endif
         }
     }
 } // end namespace
