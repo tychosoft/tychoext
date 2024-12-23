@@ -1,13 +1,9 @@
 # Contributing to this project
 
-This project is publicly licensed and will have a public home project on
+This project is publicly licensed C# project and will have a public home on
 https://www.github.com/tychosoft. This will an issue tracker where people can
-submit public bug reports, a wiki for hosting project documentation, and a
-public git repo.
-
-Given that I may be without connectivity at times the public git repo is really
-more a publication point and stable survivable public location I will use for
-packaging.
+submit public bug reports, and a public git repo. All project documentation
+will also be found either in a project wiki or in the projects repo.
 
 ## CI Integration
 
@@ -19,23 +15,15 @@ new tagged release.
 
 ## Documentation
 
-All project documentation should be available in markdown files included with
-the project and accessible from the repo.
+I am striving to make all project documentation viewable either thru each
+projects wiki pages or directly in the repo. The wiki will be used for
+projects that have graphical images for documentation.
 
 ## Issues
 
 The support ticket system can be used for bug requests, discussion items, or
 any kind of inquiry at all. It's contents are fully public. It also is entirely
 separate from my own internal development ticketing.
-
-## Patches
-
-Patches may be submitted and attached to an issue in the issue tracker or sent
-by email. They should be provided in unified diffs. All code contributions must
-be held in copyright under Tycho Softworks for now, which may require a
-copyright assignment form. This is a new requirement since all current code
-already is exclusively copyrighted by Tycho Softworks as it had only been
-worked on by me alone, but this may change if there is active participation.
 
 ## Code of Conduct
 
