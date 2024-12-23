@@ -37,6 +37,10 @@ single thread context so you can avoid the use of synchronization locks.
 This is a "cron-like" lambda dispatch service for calling timed or periodic
 functions in an application.
 
+## deque.cs
+
+This provides a stable wrapper around linked lists for a deque.
+
 ## waitgroup.cs
 
 This provides rough emulation of the Go waitgroup sync object.
