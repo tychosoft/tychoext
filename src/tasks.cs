@@ -1,14 +1,14 @@
 // Copyright (C) 2024 Tycho Softworks.
 // This code is licensed under MIT license.
 
-using System.Collections.Concurrent;
+using System.Threading;
 
 namespace Tychosoft.Extensions {
     public class Tasks {
-        private readonly ConcurrentQueue<Tuple<Action<object[]>, object[]>> tasks = new();
-        private readonly AutoResetEvent events = new(false);
-	    private readonly CancellationTokenSource cancellationTokenSource = new();
-	    private readonly Task thread;
+        private readonly object mutex = new object();
+        private readonly Thread thread;
+        private readonly Deque<Tuple<Action<object[]>, object[]>> tasks = new();
+        private bool running = false;
 	    private Func<TimeSpan> timeoutStrategy;
         private Action? shutdownStrategy;
         private Action<Exception>? errorHandler;
@@ -19,67 +19,122 @@ namespace Tychosoft.Extensions {
 	    public Tasks(Func<TimeSpan> timeout, Action? shutdown) {
 		    timeoutStrategy = timeout ?? DefaultTimeoutStrategy;
             shutdownStrategy = shutdown;
-		    thread = Task.Run(() => Process(cancellationTokenSource.Token));
+            thread = new Thread(Process);
 	    }
 
-	    public void Dispatch(Action<object[]> action, params object[] args) {
-            tasks.Enqueue(Tuple.Create(action, args));
-            events.Set();
+        public bool Dispatch(Action<object[]> action, params object[] args) {
+            lock (mutex) {
+                if(!running)
+                    return false;
+
+                tasks.PutBack(Tuple.Create(action, args));
+                Monitor.Pulse(mutex);
+            }
+            return true;
+        }
+
+        public bool Priority(Action<object[]> action, params object[] args) {
+            lock (mutex) {
+                if(!running)
+                    return false;
+                tasks.PutFront(Tuple.Create(action, args));
+                Monitor.Pulse(mutex);
+            }
+            return true;
         }
 
         public void Notify() {
-            events.Set();
+            lock (mutex) {
+                if(running)
+                    Monitor.Pulse(mutex);
+            }
         }
 
-        public async Task ShutdownAsync() {
-            cancellationTokenSource.Cancel();
-            events.Set();
-            await thread;
+        public void Startup() {
+            lock (mutex) {
+                if(running)
+                    return;
+                running = true;
+                thread.Start();
+            }
         }
 
-        public void SetShutdown(Action handler) {
-            Dispatch(args => {
-                shutdownStrategy = (Action)args[0];
-            }, handler);
+        public void Shutdown() {
+            lock (mutex) {
+                if(!running)
+                    return;
+                running = false;
+                Monitor.PulseAll(mutex);
+            }
+            if(thread.IsAlive)
+                thread.Join();
         }
 
-        public void SetTimeout(Func<TimeSpan> handler) {
-            Dispatch(args => {
-                timeoutStrategy = (Func<TimeSpan>)args[0];
-            }, handler);
+        public void SetTimeout(Func<TimeSpan> timeout) {
+            lock (mutex) {
+                if(running) throw new InvalidOperationException("Tasks already running");
+                timeoutStrategy = timeout;
+            }
         }
 
-        public void SetErrors(Action<Exception> handler) {
-            errorHandler = handler;
+        public void SetShitdown(Action shutdown) {
+            lock (mutex) {
+                if(running) throw new InvalidOperationException("Tasks already running");
+                shutdownStrategy = shutdown;
+            }
         }
 
-        private void Process(CancellationToken token) {
-            bool used = false;
-            while (!token.IsCancellationRequested) {
-                while (tasks.TryDequeue(out var task)) {
-                    var (action, args) = task;
-                    try {
-                        action(args);
+        public void SetErrors(Action<Exception> errors) {
+            lock (mutex) {
+                if(running) throw new InvalidOperationException("Tasks already running");
+                errorHandler = errors;
+            }
+        }
+
+        public void Clear() {
+            lock (mutex) {
+                tasks.Clear();
+            }
+        }
+
+        public bool IsEmpty() {
+            lock (mutex) {
+                return tasks.IsEmpty();
+            }
+        }
+
+        public int Count() {
+            lock (mutex) {
+                return tasks.Count;
+            }
+        }
+
+        private void Process() {
+            Tuple<Action<object[]>, object[]> task;
+            while(true) {
+                lock (mutex) {
+                    if(!running)
+                        return;
+
+                    if(tasks.Count == 0) {
+                        Monitor.Wait(mutex, timeoutStrategy());
+                        continue;
                     }
-                    catch (Exception ex) {
-                        errorHandler?.Invoke(ex);
-                    }
-                    used = true;
+                    task = tasks.GetFront();
                 }
 
-                if (!used) {
-                    events.WaitOne(); // Infinite wait for first task added
+                var (action, args) = task;
+                try {
+                    action(args);
                 }
-                else {
-                    events.WaitOne(timeoutStrategy()); // Wait with the timeout strategy
-                }                                                                           }
+                catch (Exception ex) {
+                    errorHandler?.Invoke(ex);
+                }
+            }
+        }
 
-            if(used)
-                shutdownStrategy?.Invoke(); // Call the shutdown strategy if provided
-	    }
-
-	    private static TimeSpan DefaultTimeoutStrategy() {
+        private static TimeSpan DefaultTimeoutStrategy() {
             return TimeSpan.FromMinutes(1);
         }
     }
-} // end namespace
+}

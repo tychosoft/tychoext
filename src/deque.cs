@@ -41,8 +41,12 @@ namespace Tychosoft.Extensions {
             return deque.Last.Value;
         }
 
-        public bool IsEmpy() {
+        public bool IsEmpty() {
             return deque.Count == 0;
+        }
+
+        public void Clear() {
+            deque.Clear();
         }
     }
 }

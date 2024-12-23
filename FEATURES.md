@@ -10,6 +10,11 @@ classes are imported under the Tychosoft.Extensions namespace.
 At the moment this is just a wrapper for atomic counter types. It may include
 atomic containers in the future.
 
+## deque.cs
+
+This provides a stable wrapper around linked lists for a deque. This class is
+uses for tasks.
+
 ## logger.cs
 
 This is a generic stand-alone logger system that is implimented as a pure
@@ -32,14 +37,14 @@ requests are processed in order. This allows for writing components where
 you want to have all operations that manipulate private data do so from a
 single thread context so you can avoid the use of synchronization locks.
 
+The C# implimentation is now based on and offers rough feature parity with the
+C++ version (task\_queue) found in ModernCLI. ConcurrentQueue has been replaced
+with Deque, and other behaviors are more consistent with ModernCLI.
+
 ## timers.cs
 
 This is a "cron-like" lambda dispatch service for calling timed or periodic
 functions in an application.
-
-## deque.cs
-
-This provides a stable wrapper around linked lists for a deque.
 
 ## waitgroup.cs
 
