@@ -5,12 +5,12 @@ using System.Threading;
 
 namespace Tychosoft.Extensions {
     public class Tasks {
-        private readonly object mutex = new object();
+        private readonly object mutex = new();
         private readonly Thread thread;
         private readonly Deque<Tuple<Action<object[]>, object[]>> tasks = new();
         private bool running = false;
 	    private Func<TimeSpan> timeoutStrategy;
-        private Action? shutdownStrategy;
+        private Action? shutdownStrategy = null;
         private Action<Exception>? errorHandler;
 
         // Default constructor with default timeout strategy
@@ -110,26 +110,31 @@ namespace Tychosoft.Extensions {
         }
 
         private void Process() {
-            Tuple<Action<object[]>, object[]> task;
-            while(true) {
-                lock (mutex) {
-                    if(!running)
-                        return;
+            try {
+                Tuple<Action<object[]>, object[]> task;
+                while(true) {
+                    lock(mutex) {
+                        if(!running)
+                            return;
 
-                    if(tasks.Count == 0) {
-                        Monitor.Wait(mutex, timeoutStrategy());
-                        continue;
+                        if(tasks.Count == 0) {
+                            Monitor.Wait(mutex, timeoutStrategy());
+                            continue;
+                        }
+                        task = tasks.GetFront();
                     }
-                    task = tasks.GetFront();
-                }
 
-                var (action, args) = task;
-                try {
-                    action(args);
+                    var (action, args) = task;
+                    try {
+                        action(args);
+                    }
+                    catch(Exception ex) {
+                        errorHandler?.Invoke(ex);
+                    }
                 }
-                catch (Exception ex) {
-                    errorHandler?.Invoke(ex);
-                }
+            }
+            finally {
+                shutdownStrategy?.Invoke();
             }
         }
 

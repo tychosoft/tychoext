@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Tychosoft.Extensions {
     public class Deque<T> {
-        private readonly LinkedList<T> deque = new LinkedList<T>();
+        private readonly LinkedList<T> deque = new();
         public int Count => deque.Count;
 
         public void PutFront(T item) {
