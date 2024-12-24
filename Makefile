@@ -25,6 +25,7 @@ release:
 	@dotnet pack -c Release
 
 publish:	release
+	@.make/publish.sh github.com:tychosoft
 	@git tag v$(VERSION)
 	@dotnet nuget push bin/Release/$(PROJECT).$(VERSION).nupkg -k $(APIKEY) -s https://api.nuget.org/v3/index.json
 
