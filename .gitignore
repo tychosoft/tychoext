@@ -1,7 +1,7 @@
 bin/
 obj/
 out/
-coverage/
+vendor/
 
 *.user
 *.rsuser
@@ -9,6 +9,7 @@ coverage/
 *.suo
 *.tmp
 *.log
+*.tar.gz
 *.userosscache
 *.sln.docstates
 

@@ -10,6 +10,7 @@
 
 # Project constants
 PROJECT := Tychosoft.Extensions
+ARCHIVE := tychoext
 VERSION := 0.1.0
 PATH := ./bin/Debug/$(DOTNET):${PATH}
 

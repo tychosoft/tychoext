@@ -8,18 +8,26 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-.PHONY: dist distvet distclean
+.PHONY: vendor dist distclean
 
-dist:	required
-	@rm -f $(PROJECT)-*.tar.gz $(PROJECT)-*.tar
-	@git archive -o $(PROJECT)-$(VERSION).tar --format tar --prefix=$(PROJECT)-$(VERSION)/ v$(VERSION) 2>/dev/null || git archive -o $(PROJECT)-$(VERSION).tar --format tar --prefix=$(PROJECT)-$(VERSION)/ HEAD
-	@if test -f vendor/modules.txt ; then \
-		tar --transform s:^:$(PROJECT)-$(VERSION)/: --append --file=$(PROJECT)-$(VERSION).tar vendor ; fi
-	@gzip $(PROJECT)-$(VERSION).tar
+ifndef ARCHIVE
+ARCHIVE := $(PROJECT)
+endif
 
-distvet:	vet
+dist:	vendor
+	@rm -f $(ARCHIVE)-*.tar.gz $(ARCHIVE)-*.tar
+	@git archive -o $(ARCHIVE)-$(VERSION).tar --format tar --prefix=$(ARCHIVE)-$(VERSION)/ v$(VERSION) 2>/dev/null || git archive -o $(ARCHIVE)-$(VERSION).tar --format tar --prefix=$(ARCHIVE)-$(VERSION)/ HEAD
+	@if test -d vendor ; then \
+		tar --transform s:^:$(ARCHIVE)-$(VERSION)/: --append --file=$(ARCHIVE)-$(VERSION).tar vendor ; fi
+	@if test -f .make/nuget.config ; then \
+		tar --transform s:^.make/:$(ARCHIVE)-$(VERSION)/: --append --file=$(ARCHIVE)-$(VERSION).tar .make/nuget.config ; fi
+
+	@gzip $(ARCHIVE)-$(VERSION).tar
 
 distclean:	clean
 	@if test -f go.mod ; then rm -rf vendor ; fi
 	@rm -f go.sum
-	@if test -f go.mod ; then ( echo "module $(PROJECT)" ; echo ; echo "$(GOVER)" ) > go.mod ; fi
+	@if test -f go.mod ; then ( echo "module $(ARCHIVE)" ; echo ; echo "$(GOVER)" ) > go.mod ; fi
+
+vendor:	restore
+	@.make/vendor.sh $(DOTNET)
