@@ -20,7 +20,6 @@
     <RepositoryUrl>https://github.com/tychosoft/tychoext</RepositoryUrl>
     <PackageTags>sdk;extensions;logging;timers;tasks</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
