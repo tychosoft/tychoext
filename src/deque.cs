@@ -31,12 +31,12 @@ namespace Tychosoft.Extensions {
             return value;
         }
 
-        public T Front() {
+        public T PeekFront() {
             if (deque.Count == 0 || deque.First == null) throw new InvalidOperationException("Deque is empty.");
             return deque.First.Value;
         }
 
-        public T Back() {
+        public T PeekBack() {
             if (deque.Count == 0 || deque.Last == null) throw new InvalidOperationException("Deque is empty.");
             return deque.Last.Value;
         }

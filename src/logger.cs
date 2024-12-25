@@ -14,8 +14,10 @@ namespace Tychosoft.Extensions {
             return loggers.GetOrAdd(categoryName, name => new FileLogger(logPath));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "<Pending>")]
-        public void Dispose() => loggers.Clear();
+        public void Dispose() {
+            loggers.Clear();
+            GC.SuppressFinalize(this);
+        }
     }
 
     public class FileLogger(string logPath) : ILogger {
