@@ -11,7 +11,7 @@ namespace Tychosoft.Extensions {
         private bool running = false;
 	    private Func<TimeSpan> timeoutStrategy;
         private Action? shutdownStrategy = null;
-        private Action<Exception>? errorHandler;
+        private Action<Exception>? errorHandler = null;
 
         // Default constructor with default timeout strategy
         public Tasks() : this(DefaultTimeoutStrategy, null) {}
@@ -22,9 +22,9 @@ namespace Tychosoft.Extensions {
             thread = new Thread(Process);
 	    }
 
-        public bool Dispatch(Action<object[]> action, params object[] args) {
+        public bool LimitedDispatch(int limit, Action<object[]> action, params object[] args) {
             lock (mutex) {
-                if(!running)
+                if(!running || tasks.Count >= limit)
                     return false;
 
                 tasks.PutBack(Tuple.Create(action, args));
@@ -33,7 +33,7 @@ namespace Tychosoft.Extensions {
             return true;
         }
 
-        public bool Priority(Action<object[]> action, params object[] args) {
+        public bool PriorityDispatch(Action<object[]> action, params object[] args) {
             lock (mutex) {
                 if(!running)
                     return false;

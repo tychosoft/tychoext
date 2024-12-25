@@ -10,11 +10,12 @@
     <TrimMode>link</TrimMode>
     <Title>Tychosoft Extensions</Title>
     <Product>Tychosoft Extensions</Product>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>David Sugar</Authors>
     <Company>Tycho Softworks</Company>
     <Description>Tychosoft C# Extensions</Description>
     <Copyright>© 2024 Tycho Softworks. Licensed under the MIT License.</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageId>Tychosoft.Extensions</PackageId>
     <RepositoryUrl>https://github.com/tychosoft/tychoext</RepositoryUrl>
     <PackageTags>sdk;extensions;logging;timers;tasks</PackageTags>
