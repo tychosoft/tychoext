@@ -11,10 +11,10 @@
 # Project constants
 PROJECT := Tychosoft.Extensions
 ARCHIVE := tychoext
-VERSION := 0.1.0
+VERSION := 0.1.1
 PATH := ./bin/Debug/$(DOTNET):${PATH}
 
-.PHONY: debug release publish clean restore version list
+.PHONY: debug release publish clean restore version list tag licenses deps
 
 all:            debug           # default target debug
 
@@ -38,6 +38,15 @@ restore:
 list:	release
 	@unzip -l bin/Release/$(PROJECT).$(VERSION).nupkg
 	@unzip -l bin/Release/$(PROJECT).$(VERSION).snupkg
+
+tag:	publish
+	@echo "release $(VERSION) published and tagged"
+
+deps:
+	@dotnet list package
+
+licenses:
+	@dotnet-project-licenses --input $(ARCHIVE).csproj --include-transitive
 
 # Optional make components we may add
 sinclude .make/*.mk
