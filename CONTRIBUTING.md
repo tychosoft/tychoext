@@ -7,11 +7,11 @@ will also be found either in a project wiki or in the projects repo.
 
 ## CI Integration
 
-At some point Github actions will be used for public ci integration. There are
-only a few types of ci actions I may use. One will be to evaluate merge
-requests, and if this is broken hopefully whomever submits a merge request can
-fix it. Others I may add over time for public things that need to be done for a
-new tagged release.
+Github actions will be used for public ci operations. There are only a few
+types of ci actions I may use. One will be to evaluate merge requests, and if
+this is broken hopefully whomever submits a merge request can fix it. Others I
+may add over time for public things that need to be done for a new tagged
+release.
 
 ## Documentation
 
