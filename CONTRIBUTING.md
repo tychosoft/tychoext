@@ -25,9 +25,3 @@ The support ticket system can be used for bug requests, discussion items, or
 any kind of inquiry at all. It's contents are fully public. It also is entirely
 separate from my own internal development ticketing.
 
-## Code of Conduct
-
-Be excellent to each other.
-
-Don't be the asshole.
-

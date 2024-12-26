@@ -1,4 +1,4 @@
-= About Tychosoft Extensions
+# About Tychosoft Extensions
 
 This package collects and centralizes testing for many common C# classes I use
 in other packages. These used to be duplicated or vendored in other packages.

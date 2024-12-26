@@ -14,7 +14,7 @@ ARCHIVE := tychoext
 VERSION := 0.1.1
 PATH := ./bin/Debug/$(DOTNET):${PATH}
 
-.PHONY: debug release publish clean restore version list tag licenses deps
+.PHONY: debug release publish clean restore version list tag licenses deps upgrade
 
 all:            debug           # default target debug
 
@@ -31,6 +31,10 @@ publish:	release
 
 clean:
 	@dotnet clean
+
+upgrade:
+	@dotnet outdated --upgrade
+	@dotnet restore
 
 restore:
 	@dotnet restore
