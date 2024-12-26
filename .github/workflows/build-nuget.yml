@@ -1,0 +1,34 @@
+name: Build NuGet Package on Merge Request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build the project
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack the project
+        run: dotnet pack --configuration Release --no-build --output ./nupkg
+
+      - name: Upload NuGet package as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nuget
+          path: ./nupkg/*.nupkg
+          if-no-files-found: error
+
