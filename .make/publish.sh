@@ -1,6 +1,16 @@
 #!/bin/sh
+# Copyright (C) 2022 Tycho Softworks.
+#
+# This file is free software; as a special exception the author gives
+# unlimited permission to copy and/or distribute it, with or without
+# modifications, as long as this notice is preserved.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
 repo="$1"
-verify=`git remote -v | head -1 | grep ${1}`
+verify=`git remote -v | grepp push | head -1 | grep ${1}`
 if test -z "$verify" ; then
 	echo "*** not in release repo" ; exit 1 ; fi
 

@@ -1,9 +1,9 @@
 # Contributing to this project
 
-This project is publicly licensed C# project and will have a public home on
-https://www.github.com/tychosoft. This will an issue tracker where people can
-submit public bug reports, and a public git repo. All project documentation
-will also be found either in a project wiki or in the projects repo.
+This project is a publicly licensed C# package and will have a public home on
+https://www.github.com/tychosoft. This will have an issue tracker where people
+can submit public bug reports, and a public git repo. All project documentation
+will also be found either in a project wiki or in the project repo.
 
 ## CI Integration
 
@@ -21,7 +21,6 @@ projects that have graphical images for documentation.
 
 ## Issues
 
-The support ticket system can be used for bug requests, discussion items, or
-any kind of inquiry at all. It's contents are fully public. It also is entirely
-separate from my own internal development ticketing.
+The github support ticket system can be used for bug requests, discussion
+items, or any other kind of inquiry at all. It's contents are fully public.
 
