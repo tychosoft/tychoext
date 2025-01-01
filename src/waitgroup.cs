@@ -3,7 +3,7 @@
 
 namespace Tychosoft.Extensions {
     public class WaitGroup {
-        private uint count;
+        private uint count = 0;
         private readonly SemaphoreSlim semaphore = new(0, int.MaxValue);
 
         public void Add(uint add = 1) {
@@ -16,14 +16,18 @@ namespace Tychosoft.Extensions {
             }
         }
 
+        public uint Count() {
+            return Volatile.Read(ref count);
+        }
+
         public void Wait() {
-            while (count > 0) {
+            while (Volatile.Read(ref count) > 0) {
                 semaphore.Wait();
             }
         }
 
         public async Task WaitAsync() {
-            while (count > 0) {
+            while (Volatile.Read(ref count) > 0) {
                 await semaphore.WaitAsync();
             }
         }
