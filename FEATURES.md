@@ -41,6 +41,10 @@ The C# implimentation is now based on and offers rough feature parity with the
 C++ version (task\_queue) found in ModernCLI. ConcurrentQueue has been replaced
 with Deque, and other behaviors are more consistent with ModernCLI.
 
+## templates.cs
+
+Just some simple templates for C# features that seem missing or incomplete.
+
 ## timers.cs
 
 This is a "cron-like" lambda dispatch service for calling timed or periodic

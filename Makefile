@@ -11,7 +11,7 @@
 # Project constants
 PROJECT := Tychosoft.Extensions
 ARCHIVE := tychoext
-VERSION := 0.1.1
+VERSION := 0.1.2
 DOTNET	:= net8.0
 ORIGIN	:= github.com:tychosoft/
 PATH	:= $(PWD)/bin/Debug/$(DOTNET):${PATH}
