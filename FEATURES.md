@@ -43,7 +43,7 @@ with Deque, and other behaviors are more consistent with ModernCLI.
 
 ## templates.cs
 
-Just some simple templates for language features or libraries that seem missing or incomplete.
+Just some simple templates for C# features that seem missing or incomplete.
 
 ## timers.cs
 
