@@ -22,6 +22,17 @@ namespace Tychosoft.Extensions {
             thread = new Thread(Process);
 	    }
 
+        public bool Dispatch(Action<object[]> action, params object[] args) {
+            lock (mutex) {
+                if(!running)
+                    return false;
+
+                tasks.PutBack(Tuple.Create(action, args));
+                Monitor.Pulse(mutex);
+            }
+            return true;
+        }
+
         public bool LimitedDispatch(int limit, Action<object[]> action, params object[] args) {
             lock (mutex) {
                 if(!running || tasks.Count >= limit)
