@@ -3,7 +3,7 @@
 
 namespace Tychosoft.Extensions {
     public class SemaphoreCount(int limit) {
-	private readonly object sync = new object();
+	private readonly object sync = new();
 	private int maxCount = limit;
 	private int runCount = 0;
 	private bool released = false;
