@@ -41,6 +41,14 @@ The C# implimentation is now based on and offers rough feature parity with the
 C++ version (task\_queue) found in ModernCLI. ConcurrentQueue has been replaced
 with Deque, and other behaviors are more consistent with ModernCLI.
 
+## semaphores.cs
+
+This provides a counting semaphore that controls execution flow much like the
+latest version of semaphore\_t does in Moderncli. This is used to "gate" the
+number of concurrent threads that can execute between a Semaphore wait and
+post, as well as allows the semaphore to be released and issue exceptions to
+any remaining pending tasks or new requests after being released.
+
 ## templates.cs
 
 Just some simple templates for C# features that seem missing or incomplete.
