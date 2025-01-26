@@ -5,7 +5,7 @@ namespace Tychosoft.Extensions {
     public class TimerQueue {
         private readonly SortedDictionary<DateTime, List<(ulong, Action<object[]>, object[], TimeSpan)>> taskQueue = [];
         private readonly Timer timer;
-        private readonly object lockObject = new();
+        private readonly object sync = new();
         private ulong nextId = 1;
         private Action<Exception>? errorHandler;
 
@@ -27,20 +27,20 @@ namespace Tychosoft.Extensions {
         }
 
         public ulong At(DateTime expires, Action<object[]> task, params object[] args) {
-            lock (lockObject) {
+            lock (sync) {
                 return Dispatch(expires, nextId++, task, args);
             }
         }
 
         public ulong Periodic(TimeSpan period, Action<object[]> task, params object[] args) {
             var now = DateTime.Now;
-            lock (lockObject) {
+            lock (sync) {
                 return Dispatch(now.Add(period), nextId++, task, args, period);
             }
         }
 
         public void Cancel(ulong id) {
-            lock (lockObject) {
+            lock (sync) {
                 foreach (var key in taskQueue.Keys.ToList()) {
                     var taskList = taskQueue[key];
                     taskList.RemoveAll(t => t.Item1 == id);
@@ -53,7 +53,7 @@ namespace Tychosoft.Extensions {
         }
 
         public DateTime Find(ulong id) {
-            lock (lockObject) {
+            lock (sync) {
                 foreach (var kvp in taskQueue) {
                     if (kvp.Value.Any(t => t.Item1 == id)) {
                         return kvp.Key;
@@ -71,7 +71,7 @@ namespace Tychosoft.Extensions {
             List<(ulong, Action<object[]>, object[], TimeSpan)> runlist;
             var now = DateTime.Now;
 
-            lock (lockObject) {
+            lock (sync) {
                 if (taskQueue.Count == 0)
                     return;
                 var nextTime = taskQueue.Keys.First();
@@ -88,7 +88,7 @@ namespace Tychosoft.Extensions {
                 try {
                     task(args);
                     if (period > TimeSpan.Zero) {
-                        lock (lockObject) {
+                        lock (sync) {
                             Dispatch(now.Add(period), id, task, args, period);
                         }
                     }
@@ -98,7 +98,7 @@ namespace Tychosoft.Extensions {
                 }
             }
 
-            lock (lockObject) {
+            lock (sync) {
                 Scheduler();
             }
         }
