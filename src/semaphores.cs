@@ -8,6 +8,22 @@ namespace Tychosoft.Extensions {
 	private int runCount = 0;
 	private bool released = false;
 
+	public bool TryWait() {
+	    lock (sync) {
+		++runCount;
+		while (!released && runCount > maxCount) {
+		    Monitor.Wait(sync);
+		}
+
+		if (released) {
+		    --runCount;
+		    return false;
+		}
+		return true;
+	    }
+	}
+
+
 	public void Wait() {
 	    lock (sync) {
 		++runCount;
