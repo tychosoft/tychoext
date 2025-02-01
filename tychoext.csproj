@@ -10,7 +10,7 @@
     <TrimMode>link</TrimMode>
     <Title>Tychosoft Extensions</Title>
     <Product>Tychosoft Extensions</Product>
-    <Version>0.2.0</Version>
+    <Version>0.2.1</Version>
     <Authors>David Sugar</Authors>
     <Company>Tycho Softworks</Company>
     <Description>Tychosoft C# Extensions</Description>
