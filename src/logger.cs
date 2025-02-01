@@ -6,52 +6,52 @@ using Microsoft.Extensions.Logging.Console;
 using System.Collections.Concurrent;
 
 namespace Tychosoft.Extensions {
-    public class FileLoggerProvider(string path) : ILoggerProvider {
-        private readonly string logPath = path;
-        private readonly ConcurrentDictionary<string, FileLogger> loggers = new();
-
-        public ILogger CreateLogger(string categoryName) {
-            return loggers.GetOrAdd(categoryName, name => new FileLogger(logPath));
-        }
-
-        public void Dispose() {
-            loggers.Clear();
-            GC.SuppressFinalize(this);
-        }
-    }
-
-    public class FileLogger(string logPath) : ILogger {
-        private readonly string path = logPath;
-        private static readonly object locker = new();
-        private static readonly LogLevel level = LogLevel.Information;
-
-        IDisposable ILogger.BeginScope<TState>(TState state) {
-            return BeginScope(state)!;
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
-        public static IDisposable BeginScope<TState>(TState state) {
-            return null!;
-        }
-
-        public bool IsEnabled(LogLevel logLevel) => logLevel >= level;
-
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter) {
-            if (!IsEnabled(logLevel)) {
-                return;
-            }
-
-            ArgumentNullException.ThrowIfNull(formatter);
-
-            var logRecord = $"{logLevel} {DateTime.Now}: {formatter(state, exception)}{Environment.NewLine}";
-
-            lock (locker) {
-                File.AppendAllText(path, logRecord);
-            }
-        }
-    }
-
     public static class Logger {
+        private class FileLoggerProvider(string path) : ILoggerProvider {
+            private readonly string logPath = path;
+            private readonly ConcurrentDictionary<string, FileLogger> loggers = new();
+
+            public ILogger CreateLogger(string categoryName) {
+                return loggers.GetOrAdd(categoryName, name => new FileLogger(logPath));
+            }
+
+            public void Dispose() {
+                loggers.Clear();
+                GC.SuppressFinalize(this);
+            }
+        }
+
+        private class FileLogger(string logPath) : ILogger {
+            private readonly string path = logPath;
+            private static readonly object locker = new();
+            private static readonly LogLevel level = LogLevel.Information;
+
+            IDisposable ILogger.BeginScope<TState>(TState state) {
+                return BeginScope(state)!;
+            }
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
+            public static IDisposable BeginScope<TState>(TState state) {
+                return null!;
+            }
+
+            public bool IsEnabled(LogLevel logLevel) => logLevel >= level;
+
+            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter) {
+                if (!IsEnabled(logLevel)) {
+                    return;
+                }
+
+                ArgumentNullException.ThrowIfNull(formatter);
+
+                var logRecord = $"{logLevel} {DateTime.Now}: {formatter(state, exception)}{Environment.NewLine}";
+
+                lock (locker) {
+                    File.AppendAllText(path, logRecord);
+                }
+            }
+        }
+
         private static ILogger? logger;
         private static ILoggerFactory? factory;
         private static readonly LoggingLevelSwitch level;

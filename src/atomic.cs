@@ -15,6 +15,10 @@ namespace Tychosoft.Extensions {
         }
 
         public int Get() {
+            return value;
+        }
+
+        public int GetAndClear() {
             return Interlocked.CompareExchange(ref value, 0, 0);
         }
 
@@ -36,6 +40,10 @@ namespace Tychosoft.Extensions {
         }
 
         public long Get() {
+            return value;
+        }
+
+        public long GetAndClear() {
             return Interlocked.CompareExchange(ref value, 0L, 0L);
         }
 
@@ -71,7 +79,7 @@ namespace Tychosoft.Extensions {
         }
 
         public bool Get() {
-            return Interlocked.CompareExchange(ref value, value, value) == 1;
+            return value == 1;
         }
     }
 } // end namespace
