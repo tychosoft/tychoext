@@ -9,16 +9,11 @@ namespace Tychosoft.Extensions {
 
 		public uint Scan(Func<string, bool> scanner) {
             var count = 0u;
-            if (!File.Exists(filePath)) {
-				throw new FileNotFoundException($"File not found: {filePath}");
-			}
-
+            if (!File.Exists(filePath)) throw new FileNotFoundException($"File not found: {filePath}");
             using var reader = new StreamReader(filePath);
             string? line;
             while ((line = reader.ReadLine()) != null) {
-                if(!scanner(line)) {
-                    break;
-                }
+                if(!scanner(line)) break;
                 count++;    
             }
             return count;  
@@ -30,14 +25,9 @@ namespace Tychosoft.Extensions {
 
         public uint Scan(Func<String, bool> scanner) {
             var count = 0u;
-            if (!Directory.Exists(dirPath)) {
-                throw new DirectoryNotFoundException($"Directory not found: {dirPath}");
-            }
-
+            if (!Directory.Exists(dirPath)) throw new DirectoryNotFoundException($"Directory not found: {dirPath}");
             foreach (var entry in Directory.EnumerateFileSystemEntries(dirPath)) {
-                if(!scanner(entry)) {
-                    break;
-                }
+                if(!scanner(entry)) break;
                 count++;
             }
             return count;

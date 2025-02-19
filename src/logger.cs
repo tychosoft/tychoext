@@ -38,14 +38,10 @@ namespace Tychosoft.Extensions {
             public bool IsEnabled(LogLevel logLevel) => logLevel >= level;
 
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter) {
-                if (!IsEnabled(logLevel)) {
-                    return;
-                }
-
+                if (!IsEnabled(logLevel)) return;
                 ArgumentNullException.ThrowIfNull(formatter);
 
                 var logRecord = $"{logLevel} {DateTime.Now}: {formatter(state, exception)}{Environment.NewLine}";
-
                 lock (locker) {
                     File.AppendAllText(path, logRecord);
                 }
@@ -74,17 +70,15 @@ namespace Tychosoft.Extensions {
                     options.SingleLine = true;
                 });
 
-                if (path != null) {
+                if (path != null)
                     builder.AddProvider(new FileLoggerProvider(path));
-                }
             });
             logger = factory?.CreateLogger(name);
         }
 
         public static void Shutdown() {
-            if (factory is IDisposable disposable) {
+            if (factory is IDisposable disposable)
                 disposable.Dispose();
-            }
         }
 
         public static void Info(string? message, params object?[] args) {
