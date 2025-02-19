@@ -44,9 +44,8 @@ namespace Tychosoft.Extensions {
                 foreach (var key in taskQueue.Keys.ToList()) {
                     var taskList = taskQueue[key];
                     taskList.RemoveAll(t => t.Item1 == id);
-                    if (taskList.Count == 0) {
+                    if (taskList.Count == 0)
                         taskQueue.Remove(key);
-                    }
                 }
                 Scheduler();
             }
@@ -55,9 +54,7 @@ namespace Tychosoft.Extensions {
         public DateTime Find(ulong id) {
             lock (sync) {
                 foreach (var kvp in taskQueue) {
-                    if (kvp.Value.Any(t => t.Item1 == id)) {
-                        return kvp.Key;
-                    }
+                    if (kvp.Value.Any(t => t.Item1 == id)) return kvp.Key;
                 }
                 return DateTime.MinValue;
             }
@@ -72,8 +69,7 @@ namespace Tychosoft.Extensions {
             var now = DateTime.Now;
 
             lock (sync) {
-                if (taskQueue.Count == 0)
-                    return;
+                if (taskQueue.Count == 0) return;
                 var nextTime = taskQueue.Keys.First();
                 if (nextTime > now) {
                     Scheduler();

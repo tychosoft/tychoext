@@ -24,9 +24,7 @@ namespace Tychosoft.Extensions {
 
         public bool Dispatch(Action<object[]> action, params object[] args) {
             lock (sync) {
-                if(!running)
-                    return false;
-
+                if(!running) return false;
                 tasks.PutBack(Tuple.Create(action, args));
                 Monitor.Pulse(sync);
             }
@@ -35,9 +33,7 @@ namespace Tychosoft.Extensions {
 
         public bool LimitedDispatch(int limit, Action<object[]> action, params object[] args) {
             lock (sync) {
-                if(!running || tasks.Count >= limit)
-                    return false;
-
+                if(!running || tasks.Count >= limit) return false;
                 tasks.PutBack(Tuple.Create(action, args));
                 Monitor.Pulse(sync);
             }
@@ -46,8 +42,7 @@ namespace Tychosoft.Extensions {
 
         public bool PriorityDispatch(Action<object[]> action, params object[] args) {
             lock (sync) {
-                if(!running)
-                    return false;
+                if(!running) return false;
                 tasks.PutFront(Tuple.Create(action, args));
                 Monitor.Pulse(sync);
             }
@@ -63,8 +58,7 @@ namespace Tychosoft.Extensions {
 
         public void Startup() {
             lock (sync) {
-                if(running)
-                    return;
+                if(running) return;
                 running = true;
                 thread.Start();
             }
@@ -72,8 +66,7 @@ namespace Tychosoft.Extensions {
 
         public void Shutdown() {
             lock (sync) {
-                if(!running)
-                    return;
+                if(!running) return;
                 running = false;
                 Monitor.PulseAll(sync);
             }
@@ -125,9 +118,7 @@ namespace Tychosoft.Extensions {
                 Tuple<Action<object[]>, object[]> task;
                 while (true) {
                     lock (sync) {
-                        if (!running)
-                            return;
-
+                        if (!running) return;
                         if (tasks.Count == 0) {
                             Monitor.Wait(sync, timeoutStrategy());
                             continue;
@@ -151,8 +142,7 @@ namespace Tychosoft.Extensions {
 
         static public T GetFuture<T>(Task<T> task, Func<bool> predicate, TimeSpan interval) {
             while (!task.Wait(interval)) {
-                if (!predicate())
-                    throw new OperationCanceledException();
+                if (!predicate()) throw new OperationCanceledException();
             }
             return task.Result;
         }
