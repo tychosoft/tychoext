@@ -18,7 +18,7 @@ PATH	:= $(PWD)/bin/Debug/$(DOTNET):${PATH}
 
 .PHONY: debug release publish list verify
 
-all:            debug           # default target debug
+all:		debug      	# default target debug
 verify:		release		# default verification
 
 debug:
