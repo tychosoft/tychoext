@@ -7,7 +7,7 @@ case, though these classes may have general uses in client applications as
 well.
 
 Tychosoft Extensions are meant to be usable on C# and dotnet generically and
-should be fully buildable cross-platform. Most often they would be acquired as
+should be fully build-able cross-platform. Most often they would be acquired as
 a nuget package. They should also work fine producing native AOT code.
 Currently I am testing and developing these classes with .NET 8.0. A simple
 Makefile is provided to make it easy to build and test on Linux systems or in

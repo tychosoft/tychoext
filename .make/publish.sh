@@ -10,7 +10,7 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 repo="$1"
-verify=`git remote -v | grepp push | head -1 | grep ${1}`
+verify=`git remote -v | grep push | head -1 | grep ${1}`
 if test -z "$verify" ; then
 	echo "*** not in release repo" ; exit 1 ; fi
 

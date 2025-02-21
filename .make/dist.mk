@@ -8,7 +8,7 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-.PHONY: vendor dist distclean
+.PHONY: vendor dist
 
 ifndef ARCHIVE
 ARCHIVE := $(PROJECT)
@@ -23,11 +23,6 @@ dist:	vendor
 		tar --transform s:^.make/:$(ARCHIVE)-$(VERSION)/: --append --file=$(ARCHIVE)-$(VERSION).tar .make/nuget.config ; fi
 
 	@gzip $(ARCHIVE)-$(VERSION).tar
-
-distclean:	clean
-	@if test -f go.mod ; then rm -rf vendor ; fi
-	@rm -f go.sum
-	@if test -f go.mod ; then ( echo "module $(ARCHIVE)" ; echo ; echo "$(GOVER)" ) > go.mod ; fi
 
 vendor:	restore
 	@.make/vendor.sh $(DOTNET)

@@ -17,7 +17,7 @@ uses for tasks.
 
 ## logger.cs
 
-This is a generic stand-alone logger system that is implimented as a pure
+This is a generic stand-alone logger system that is implemented as a pure
 static class. This means you do not have to create instances of loggers
 everywhere in your code. There is a component Startup and Shutdown method you
 probably would call from your main(), and then you just call various static
@@ -25,7 +25,7 @@ logger member functions directly.
 
 ## scan.cs
 
-The ScanFile and ScanDir classes are used to execute lambda functors from
+The ScanFile and ScanDir classes are used to execute lambda functions from
 each line of a text file or each entry in a directory. The idea behind this
 is found in the behavior of the Ruby file library.
 
@@ -37,7 +37,7 @@ requests are processed in order. This allows for writing components where
 you want to have all operations that manipulate private data do so from a
 single thread context so you can avoid the use of synchronization locks.
 
-The C# implimentation is now based on and offers rough feature parity with the
+The C# implementation is now based on and offers rough feature parity with the
 C++ version (task\_queue) found in ModernCLI. ConcurrentQueue has been replaced
 with Deque, and other behaviors are more consistent with ModernCLI.
 
